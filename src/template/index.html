@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+  <style>
+    body {
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+  <script>
+    var now = +new Date();
+    window.__isLogin = true;
+  </script>
+  <% if (htmlWebpackPlugin.options.gtag) { %>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.gtag %>"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-8357088632552308",
+      enable_page_level_ads: true
+    });
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', '<%= htmlWebpackPlugin.options.gtag %>');
+  </script>
+  <% } %>
+  <%= htmlWebpackPlugin.options.zoom %>
+  <%= htmlWebpackPlugin.options.loading.css %>
+</head>
+
+<body>
+  <div id="app"><%= htmlWebpackPlugin.options.loading.html %></div>
+  <%= htmlWebpackPlugin.options.dll %>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>

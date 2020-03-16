@@ -1,11 +1,21 @@
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
-import rootReducer from 'redux/reducers';
+import createRootReducer from 'redux/reducers';
+import { history } from 'core/history';
 import defaultState from '../defaultState';
 import { promiseMiddleware } from '../middleware';
 
-const middleware = [createLogger(), promiseMiddleware];
+const middleware = [
+  createLogger(),
+  promiseMiddleware,
+  routerMiddleware(history)
+];
 
-const store = createStore(rootReducer, defaultState, applyMiddleware(...middleware));
+const store = createStore(
+  createRootReducer(history),
+  defaultState,
+  applyMiddleware(...middleware)
+);
 
 export default store;

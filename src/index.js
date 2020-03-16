@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import 'assets/styles/index.less';
 import 'assets/styles/antd.less';
+import 'assets/styles/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

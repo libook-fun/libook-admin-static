@@ -1,5 +1,21 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Select, Input, Switch, Button, Table, Divider, message, Breadcrumb, Popover, Icon } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Switch,
+  Button,
+  Table,
+  Divider,
+  message,
+  Breadcrumb,
+  Popover
+} from 'antd';
+import {
+  PlusCircleOutlined,
+  ExclamationCircleOutlined,
+  SearchOutlined
+} from '@ant-design/icons';
 import moment from 'moment';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
@@ -30,7 +46,7 @@ export default class Book extends PureComponent {
       {
         dataIndex: 'category_id',
         title: '分类',
-        render: (category_id) => {
+        render: category_id => {
           const { categoryMap = {} } = this.state;
           return categoryMap[`${category_id}`];
         }
@@ -62,7 +78,7 @@ export default class Book extends PureComponent {
         title: (
           <Popover content={'丛书不可被推荐'} title={null} trigger="hover">
             操作
-            <Icon type="question-circle" style={{ marginLeft: 4 }} />
+            <ExclamationCircleOutlined style={{ marginLeft: 4 }} />
           </Popover>
         ),
         render: (text, record = {}, index) => {
@@ -77,9 +93,13 @@ export default class Book extends PureComponent {
               {is_subbook == 0 ? (
                 <Fragment>
                   <Divider type="vertical" />
-                  <Link to={`/cms/book/subbook?parent_id=${book_id}`}>查看丛书</Link>
+                  <Link to={`/cms/book/subbook?parent_id=${book_id}`}>
+                    查看丛书
+                  </Link>
                   <Divider type="vertical" />
-                  <Link to={`/cms/recommender/add?book_id=${book_id}`}>加入推荐</Link>
+                  <Link to={`/cms/recommender/add?book_id=${book_id}`}>
+                    加入推荐
+                  </Link>
                 </Fragment>
               ) : null}
               <Divider type="vertical" />
@@ -100,7 +120,7 @@ export default class Book extends PureComponent {
     getCategorys()
       .then((categorys = []) => {
         const categoryMap = {};
-        const categoryOptions = categorys.map((category) => {
+        const categoryOptions = categorys.map(category => {
           categoryMap[`${category.category_id}`] = category.name;
           return {
             value: `${category.category_id}`,
@@ -117,7 +137,7 @@ export default class Book extends PureComponent {
           }
         );
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           loading: false
         });
@@ -156,7 +176,7 @@ export default class Book extends PureComponent {
           loading: false
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           loading: false
         });
@@ -176,7 +196,16 @@ export default class Book extends PureComponent {
   };
 
   render() {
-    const { category_id, name, author, order, pagination, dataSource, categoryOptions, loading } = this.state;
+    const {
+      category_id,
+      name,
+      author,
+      order,
+      pagination,
+      dataSource,
+      categoryOptions,
+      loading
+    } = this.state;
     return (
       <div className="pages-book g-pages-list-table">
         <Breadcrumb>
@@ -185,7 +214,7 @@ export default class Book extends PureComponent {
           </Breadcrumb.Item>
           <Breadcrumb.Item>书籍管理</Breadcrumb.Item>
         </Breadcrumb>
-        <Form layout="inline">
+        <Form layout="inline" style={{ marginTop: 20, marginBottom: 20 }}>
           <Form.Item label="分类">
             <Select
               style={{ width: 224 }}
@@ -194,10 +223,14 @@ export default class Book extends PureComponent {
               placeholder="请选择"
               value={category_id ? `${category_id}` : category_id}
               optionFilterProp="children"
-              onChange={(category_id) => {
+              onChange={category_id => {
                 this.setState({ category_id });
               }}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
             >
               {getOptions(categoryOptions)}
             </Select>
@@ -208,7 +241,7 @@ export default class Book extends PureComponent {
               type="text"
               placeholder="请输入"
               value={name}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   name: e.target.value || undefined
                 });
@@ -221,7 +254,7 @@ export default class Book extends PureComponent {
               type="text"
               placeholder="请输入"
               value={author}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   author: e.target.value || undefined
                 });
@@ -233,7 +266,7 @@ export default class Book extends PureComponent {
               checkedChildren="更新时间"
               unCheckedChildren="创建时间"
               checked={order}
-              onChange={(checked) => {
+              onChange={checked => {
                 this.setState({
                   order: checked
                 });
@@ -243,6 +276,7 @@ export default class Book extends PureComponent {
           <Form.Item label={' '} colon={false}>
             <Button
               type="primary"
+              icon={<SearchOutlined />}
               htmlType="submit"
               loading={loading}
               onClick={() => {
@@ -252,18 +286,18 @@ export default class Book extends PureComponent {
               查询
             </Button>
           </Form.Item>
+          <Form.Item label={' '} colon={false}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => {
+                history.push('/cms/book/add');
+              }}
+            >
+              创建书籍
+            </Button>
+          </Form.Item>
         </Form>
-        <div className="list-table-operator">
-          <Button
-            type="primary"
-            icon="plus"
-            onClick={() => {
-              history.push('/cms/book/add');
-            }}
-          >
-            创建书籍
-          </Button>
-        </div>
         <Table
           columns={this.columns}
           dataSource={dataSource}

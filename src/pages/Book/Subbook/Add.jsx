@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
-import { Form, Select, Input, Upload, Button, Icon, message, Breadcrumb, PageHeader } from 'antd';
+import { Form, Select, Input, Upload, Button, message, Breadcrumb, PageHeader } from 'antd';
 import { getAvailableSubbooks, getBook, createBind } from 'agent';
 import { getOptions, FORM_LAYOUT } from 'utils/antdHelpers';
 

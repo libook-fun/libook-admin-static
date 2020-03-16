@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Upload, Icon, message } from 'antd';
+import { Upload, message } from 'antd';
+import Icon from '@ant-design/icons';
 
 export default class Upload extends Component {
   constructor(props) {

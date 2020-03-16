@@ -1,8 +1,24 @@
 import React, { PureComponent } from 'react';
-import { Form, Select, Input, Upload, Button, Icon, message, Breadcrumb, Tag } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Upload,
+  Button,
+  message,
+  Breadcrumb,
+  Tag
+} from 'antd';
+import { UploadOutlined, FileImageOutlined } from '@ant-design/icons';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
-import { getBook, getExhibitions, getRecommender, createRecommender, updateRecommender } from 'agent';
+import {
+  getBook,
+  getExhibitions,
+  getRecommender,
+  createRecommender,
+  updateRecommender
+} from 'agent';
 import { getOptions, FORM_LAYOUT } from 'utils/antdHelpers';
 import { TYPE_OPTIONS } from './common';
 
@@ -38,7 +54,7 @@ export default class RecommenderAdd extends PureComponent {
             });
           }
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     recommender_id &&
@@ -54,7 +70,7 @@ export default class RecommenderAdd extends PureComponent {
             exhibition_id
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     getExhibitions()
@@ -66,13 +82,21 @@ export default class RecommenderAdd extends PureComponent {
           }))
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
 
   check() {
-    const { recommender_id, book_id, type, name, description, pic, exhibition_id } = this.state;
+    const {
+      recommender_id,
+      book_id,
+      type,
+      name,
+      description,
+      pic,
+      exhibition_id
+    } = this.state;
     if (!book_id) {
       message.error('请关联书籍');
       return false;
@@ -101,7 +125,14 @@ export default class RecommenderAdd extends PureComponent {
   }
 
   getParam() {
-    const { recommender_id, book_id, type, name, description, pic } = this.state;
+    const {
+      recommender_id,
+      book_id,
+      type,
+      name,
+      description,
+      pic
+    } = this.state;
     const param = {
       recommender_id,
       book_id,
@@ -128,7 +159,7 @@ export default class RecommenderAdd extends PureComponent {
     });
     if (recommender_id) {
       updateRecommender(data)
-        .then((data) => {
+        .then(data => {
           this.setState({
             loading: false
           });
@@ -136,7 +167,7 @@ export default class RecommenderAdd extends PureComponent {
             history.goBack();
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             loading: false
           });
@@ -144,7 +175,7 @@ export default class RecommenderAdd extends PureComponent {
         });
     } else {
       createRecommender(data)
-        .then((data) => {
+        .then(data => {
           this.setState({
             loading: false
           });
@@ -152,7 +183,7 @@ export default class RecommenderAdd extends PureComponent {
             history.push(`/cms/recommender`);
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             loading: false
           });
@@ -183,17 +214,21 @@ export default class RecommenderAdd extends PureComponent {
           <Breadcrumb.Item>
             <Link to="/cms/recommender">推荐管理</Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{recommender_id ? '更新' : '创建'}推荐</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {recommender_id ? '更新' : '创建'}推荐
+          </Breadcrumb.Item>
         </Breadcrumb>
         <Form {...FORM_LAYOUT}>
           <Form.Item label="推荐书籍" required>
-            {book_id && book ? `${book.author}-${book.category.name}-${book.name}` : '空'}
+            {book_id && book
+              ? `${book.author}-${book.category.name}-${book.name}`
+              : '空'}
           </Form.Item>
           <Form.Item label="分类" required>
             <Select
               placeholder="请选择"
               value={`${type}`}
-              onChange={(type) => {
+              onChange={type => {
                 this.setState({ type });
               }}
               ref={ref => (this.type = ref)}
@@ -208,10 +243,14 @@ export default class RecommenderAdd extends PureComponent {
                 placeholder="请选择"
                 value={exhibition_id ? `${exhibition_id}` : exhibition_id}
                 optionFilterProp="children"
-                onChange={(exhibition_id) => {
+                onChange={exhibition_id => {
                   this.setState({ exhibition_id });
                 }}
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                filterOption={(input, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
                 ref={ref => (this.exhibition_id = ref)}
               >
                 {getOptions(exhibitionOptions)}
@@ -223,7 +262,7 @@ export default class RecommenderAdd extends PureComponent {
               type="text"
               placeholder="请输入"
               value={name}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   name: e.target.value || undefined
                 });
@@ -238,7 +277,7 @@ export default class RecommenderAdd extends PureComponent {
               type="text"
               placeholder="请输入"
               value={description}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   description: e.target.value || undefined
                 });
@@ -251,23 +290,27 @@ export default class RecommenderAdd extends PureComponent {
               {!pic ? (
                 <Upload.Dragger
                   accept="image/png,image/jpeg,image/gif,image/webp"
-                  beforeUpload={(pic) => {
+                  beforeUpload={pic => {
                     this.setState({
                       pic
                     });
                     return false;
                   }}
-                  onRemove={(pic) => {
+                  onRemove={pic => {
                     this.setState({
                       pic: undefined
                     });
                   }}
                 >
                   <p className="ant-upload-drag-icon">
-                    <Icon type="inbox" />
+                    <UploadOutlined />
                   </p>
-                  <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                  <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+                  <p className="ant-upload-text">
+                    Click or drag file to this area to upload
+                  </p>
+                  <p className="ant-upload-hint">
+                    Support for a single or bulk upload.
+                  </p>
                 </Upload.Dragger>
               ) : (
                 <div>
@@ -279,7 +322,7 @@ export default class RecommenderAdd extends PureComponent {
                       });
                     }}
                   >
-                    <Icon type="file-image" />
+                    <FileImageOutlined />
                     <span style={{ marginLeft: 10 }}>{pic.name}</span>
                   </Tag>
                 </div>
@@ -287,7 +330,12 @@ export default class RecommenderAdd extends PureComponent {
             </Form.Item>
           ) : null}
           <Form.Item label={' '} colon={false}>
-            <Button type="primary" htmlType="submit" loading={loading} onClick={this.submit}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              onClick={this.submit}
+            >
               {recommender_id ? '更新' : '创建'}
             </Button>
           </Form.Item>

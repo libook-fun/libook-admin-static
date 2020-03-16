@@ -7,3 +7,5 @@ export const getChapter = chapter_id => request.get({ url: '/api/v1/chapter/read
 export const createChapter = data => request.postForm({ url: '/api/v1/chapter/create', data }).then(data => data);
 
 export const updateChapter = data => request.postForm({ url: '/api/v1/chapter/update', data }).then(data => data);
+
+export const grabChapter = data => request.get({ url: '/api/v1/chapter/grab', data }).then(data => data);

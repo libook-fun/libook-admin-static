@@ -1,5 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Input, Switch, Button, Table, Divider, message, Breadcrumb } from 'antd';
+import {
+  Form,
+  Input,
+  Switch,
+  Button,
+  Table,
+  Divider,
+  message,
+  Breadcrumb
+} from 'antd';
+import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
@@ -41,9 +51,15 @@ export default class Exhibition extends Component {
           const { exhibition_id } = record;
           return (
             <Fragment>
-              <Link to={`/cms/exhibition/add?exhibition_id=${exhibition_id}`}>编辑</Link>
+              <Link to={`/cms/exhibition/add?exhibition_id=${exhibition_id}`}>
+                编辑
+              </Link>
               <Divider type="vertical" />
-              <Link to={`/cms/recommender/?type=0&exhibition_id=${exhibition_id}`}>查看推荐</Link>
+              <Link
+                to={`/cms/recommender/?type=0&exhibition_id=${exhibition_id}`}
+              >
+                查看推荐
+              </Link>
               <Divider type="vertical" />
               <a
                 onClick={() => {
@@ -66,12 +82,12 @@ export default class Exhibition extends Component {
   delete(record = {}) {
     const { exhibition_id } = record;
     deleteExhibition(exhibition_id)
-      .then((data) => {
+      .then(data => {
         message.success('删除成功', 1, () => {
           this.getExhibitions();
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
@@ -105,7 +121,7 @@ export default class Exhibition extends Component {
           loading: false
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           loading: false
         });
@@ -134,14 +150,14 @@ export default class Exhibition extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item>展位管理</Breadcrumb.Item>
         </Breadcrumb>
-        <Form layout="inline">
+        <Form layout="inline" style={{ marginTop: 20, marginBottom: 20 }}>
           <Form.Item label="名称">
             <Input
               allowClear
               type="text"
               placeholder="请输入"
               value={name}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   name: e.target.value || undefined
                 });
@@ -153,7 +169,7 @@ export default class Exhibition extends Component {
               checkedChildren="更新时间"
               unCheckedChildren="创建时间"
               checked={order}
-              onChange={(checked) => {
+              onChange={checked => {
                 this.setState({
                   order: checked
                 });
@@ -163,6 +179,7 @@ export default class Exhibition extends Component {
           <Form.Item label={' '} colon={false}>
             <Button
               type="primary"
+              icon={<SearchOutlined />}
               htmlType="submit"
               loading={loading}
               onClick={() => {
@@ -172,18 +189,18 @@ export default class Exhibition extends Component {
               查询
             </Button>
           </Form.Item>
+          <Form.Item label={' '} colon={false}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => {
+                history.push('/cms/exhibition/add');
+              }}
+            >
+              创建展位
+            </Button>
+          </Form.Item>
         </Form>
-        <div className="list-table-operator">
-          <Button
-            type="primary"
-            icon="plus"
-            onClick={() => {
-              history.push('/cms/exhibition/add');
-            }}
-          >
-            创建展位
-          </Button>
-        </div>
         <Table
           columns={this.columns}
           dataSource={dataSource}

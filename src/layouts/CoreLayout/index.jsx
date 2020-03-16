@@ -1,66 +1,77 @@
-import React, { Fragment } from 'react';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import CoreRouter from 'core/Router';
 import { history } from 'core/history';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb } from 'antd';
+import Icon from '@ant-design/icons';
+import { menus } from './common';
 import './index.less';
 
-const CoreLayout = () => (
-  <Layout>
-    <Layout.Header>
-      <div className="logo" />
-    </Layout.Header>
-    <Layout>
-      <Layout.Sider width={200} style={{ background: '#fff' }}>
-        <Menu
-          mode="inline"
-          onSelect={(item) => {
-            const { key } = item;
-            history.push(key);
-          }}
-          style={{ height: '100%', borderRight: 0 }}
-        >
-          <Menu.Item key="/cms">
-            <Icon type="home" />
-            <span>首页</span>
-          </Menu.Item>
-          <Menu.Item key="/cms/category">
-            <Icon type="container" />
-            <span>分类管理</span>
-          </Menu.Item>
-          <Menu.Item key="/cms/book">
-            <Icon type="book" />
-            <span>书籍管理</span>
-          </Menu.Item>
-          <Menu.Item key="/cms/exhibition">
-            <Icon type="account-book" />
-            <span>展位管理</span>
-          </Menu.Item>
-          <Menu.Item key="/cms/recommender">
-            <Icon type="fire" />
-            <span>推荐管理</span>
-          </Menu.Item>
-        </Menu>
-      </Layout.Sider>
-      <Layout style={{ padding: '0 24px 24px' }}>
-        {/* <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb> */}
-        <Layout.Content
-          style={{
-            background: '#fff',
-            padding: 24,
-            margin: 0,
-            minHeight: 280
-          }}
-        >
-          <CoreRouter />
-        </Layout.Content>
-      </Layout>
-    </Layout>
-    <Layout.Footer />
-  </Layout>
-);
+class CoreLayout extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-export default CoreLayout;
+  render() {
+    const { pathname } = this.props;
+    return (
+      <Layout className="layouts-corelayout">
+        <Layout.Header>
+          <div className="logo" />
+        </Layout.Header>
+        <Layout>
+          <Layout.Sider
+            className="sidebar"
+            width={200}
+            style={{ background: '#fff' }}
+          >
+            <Menu
+              mode="inline"
+              onSelect={item => {
+                const { key } = item;
+                history.push(key);
+              }}
+              selectedKeys={[pathname]}
+              style={{ height: '100%', borderRight: 0 }}
+            >
+              {menus.map((menu = {}, index) => {
+                console.log(menu);
+                return (
+                  <Menu.Item key={menu.key}>
+                    <menu.Icon />
+                    <span>{menu.value}</span>
+                  </Menu.Item>
+                );
+              })}
+            </Menu>
+          </Layout.Sider>
+          <Layout style={{ padding: '24px 24px 24px' }}>
+            <Layout.Content
+              style={{
+                background: '#fff',
+                padding: 24,
+                margin: 0,
+                minHeight: 280
+              }}
+            >
+              <CoreRouter />
+            </Layout.Content>
+          </Layout>
+        </Layout>
+        {/* <Layout.Footer /> */}
+      </Layout>
+    );
+  }
+}
+
+const mapStateToProps = function({ router }) {
+  const pathname =
+    router && router.location && router.location.pathname
+      ? router.location.pathname
+      : '';
+  return {
+    pathname: pathname
+  };
+};
+export default connect(mapStateToProps)(CoreLayout);

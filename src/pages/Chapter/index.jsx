@@ -1,5 +1,15 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Input, Switch, Button, Table, message, Divider, Breadcrumb } from 'antd';
+import {
+  Form,
+  Input,
+  Switch,
+  Button,
+  Table,
+  message,
+  Divider,
+  Breadcrumb
+} from 'antd';
+import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
@@ -48,9 +58,16 @@ export default class Chapter extends PureComponent {
           const { chapter_id, book_id } = record;
           return (
             <Fragment>
-              <Link to={`/cms/chapter/add?book_id=${book_id}&chapter_id=${chapter_id}`}>编辑</Link>
+              <Link
+                to={`/cms/chapter/add?book_id=${book_id}&chapter_id=${chapter_id}`}
+              >
+                编辑
+              </Link>
               <Divider type="vertical" />
-              <a target="_blank" href={getPreviewURL(`/chapter?id=${chapter_id}`)}>
+              <a
+                target="_blank"
+                href={getPreviewURL(`/chapter?id=${chapter_id}`)}
+              >
                 预览
               </a>
             </Fragment>
@@ -69,7 +86,7 @@ export default class Chapter extends PureComponent {
             book
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     book_id && this.getChapters();
@@ -105,7 +122,7 @@ export default class Chapter extends PureComponent {
           loading: false
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           loading: false
         });
@@ -125,7 +142,15 @@ export default class Chapter extends PureComponent {
   };
 
   render() {
-    const { book_id, name, order, book, pagination, dataSource, loading } = this.state;
+    const {
+      book_id,
+      name,
+      order,
+      book,
+      pagination,
+      dataSource,
+      loading
+    } = this.state;
     return (
       <div className="pages-chapter g-pages-list-table">
         <Breadcrumb>
@@ -142,14 +167,14 @@ export default class Chapter extends PureComponent {
             {book.category.name}-{book.name}-{book.author}
           </div>
         ) : null}
-        <Form layout="inline">
+        <Form layout="inline" style={{ marginTop: 20, marginBottom: 20 }}>
           <Form.Item label="名称">
             <Input
               allowClear
               type="text"
               placeholder="请输入"
               value={name}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   name: e.target.value || undefined
                 });
@@ -161,7 +186,7 @@ export default class Chapter extends PureComponent {
               checkedChildren="更新时间"
               unCheckedChildren="创建时间"
               checked={order}
-              onChange={(checked) => {
+              onChange={checked => {
                 this.setState({
                   order: checked
                 });
@@ -171,6 +196,7 @@ export default class Chapter extends PureComponent {
           <Form.Item label={' '} colon={false}>
             <Button
               type="primary"
+              icon={<SearchOutlined />}
               htmlType="submit"
               loading={loading}
               onClick={() => {
@@ -180,18 +206,18 @@ export default class Chapter extends PureComponent {
               查询
             </Button>
           </Form.Item>
+          <Form.Item label={' '} colon={false}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => {
+                history.push(`/cms/chapter/add?book_id=${book_id}`);
+              }}
+            >
+              创建章节
+            </Button>
+          </Form.Item>
         </Form>
-        <div className="list-table-operator">
-          <Button
-            type="primary"
-            icon="plus"
-            onClick={() => {
-              history.push(`/cms/chapter/add?book_id=${book_id}`);
-            }}
-          >
-            创建章节
-          </Button>
-        </div>
         <Table
           columns={this.columns}
           dataSource={dataSource}

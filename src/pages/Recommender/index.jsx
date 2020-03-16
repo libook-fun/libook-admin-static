@@ -1,9 +1,25 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Button, Select, Switch, Table, Divider, message, Breadcrumb } from 'antd';
+import {
+  Form,
+  Button,
+  Select,
+  Switch,
+  Table,
+  Divider,
+  message,
+  Breadcrumb
+} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
-import { getExhibitions, getRecommenders, activeRecommender, disableRecommender, deleteRecommender } from 'agent';
+import {
+  getExhibitions,
+  getRecommenders,
+  activeRecommender,
+  disableRecommender,
+  deleteRecommender
+} from 'agent';
 import { getOptions } from 'utils/antdHelpers';
 import { TYPE_OPTIONS, TYPE_MAP, STATE_OPTIONS, STATE_MAP } from './common';
 // import './index.scss';
@@ -37,7 +53,11 @@ export default class RecommenderPage extends PureComponent {
         render: (type, record = {}, index) => {
           const { exhibition_id } = record;
           if (type == 0) {
-            return <Link to={`/cms/exhibition/add?id=${exhibition_id}`}>{TYPE_MAP[type] || '未知'}</Link>;
+            return (
+              <Link to={`/cms/exhibition/add?id=${exhibition_id}`}>
+                {TYPE_MAP[type] || '未知'}
+              </Link>
+            );
           } else {
             return TYPE_MAP[type] || '未知';
           }
@@ -67,7 +87,11 @@ export default class RecommenderPage extends PureComponent {
           const { recommender_id, book_id, state } = record;
           return (
             <Fragment>
-              <Link to={`/cms/recommender/add?recommender_id=${recommender_id}&book_id=${book_id}`}>编辑</Link>
+              <Link
+                to={`/cms/recommender/add?recommender_id=${recommender_id}&book_id=${book_id}`}
+              >
+                编辑
+              </Link>
               <Divider type="vertical" />
               <a
                 onClick={() => {
@@ -102,7 +126,7 @@ export default class RecommenderPage extends PureComponent {
           }))
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
@@ -138,7 +162,7 @@ export default class RecommenderPage extends PureComponent {
           loading: false
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           loading: false
         });
@@ -150,22 +174,22 @@ export default class RecommenderPage extends PureComponent {
     const { recommender_id, state } = record;
     if (state === 1) {
       disableRecommender(recommender_id)
-        .then((data) => {
+        .then(data => {
           message.success('失效成功', 1, () => {
             this.getRecommenders();
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     } else {
       activeRecommender(recommender_id)
-        .then((data) => {
+        .then(data => {
           message.success('激活成功', 1, () => {
             this.getRecommenders();
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     }
@@ -174,12 +198,12 @@ export default class RecommenderPage extends PureComponent {
   delete(record = {}) {
     const { recommender_id } = record;
     deleteRecommender(recommender_id)
-      .then((data) => {
+      .then(data => {
         message.success('删除成功', 1, () => {
           this.getRecommenders();
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
@@ -196,7 +220,16 @@ export default class RecommenderPage extends PureComponent {
   };
 
   render() {
-    const { type, state, order, exhibition_id, exhibitionOptions, pagination, dataSource, loading } = this.state;
+    const {
+      type,
+      state,
+      order,
+      exhibition_id,
+      exhibitionOptions,
+      pagination,
+      dataSource,
+      loading
+    } = this.state;
     return (
       <div className="pages-recommender g-pages-list-table">
         <Breadcrumb>
@@ -207,7 +240,7 @@ export default class RecommenderPage extends PureComponent {
             <Link to="/cms/recommender">推荐管理</Link>
           </Breadcrumb.Item>
         </Breadcrumb>
-        <Form layout="inline">
+        <Form layout="inline" style={{ marginTop: 20, marginBottom: 20 }}>
           <Form.Item label="类型">
             <Select
               allowClear
@@ -216,10 +249,14 @@ export default class RecommenderPage extends PureComponent {
               placeholder="请选择"
               value={type ? `${type}` : type}
               optionFilterProp="children"
-              onChange={(type) => {
+              onChange={type => {
                 this.setState({ type });
               }}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
             >
               {getOptions(TYPE_OPTIONS)}
             </Select>
@@ -233,10 +270,14 @@ export default class RecommenderPage extends PureComponent {
                 placeholder="请选择"
                 value={exhibition_id ? `${exhibition_id}` : exhibition_id}
                 optionFilterProp="children"
-                onChange={(exhibition_id) => {
+                onChange={exhibition_id => {
                   this.setState({ exhibition_id });
                 }}
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                filterOption={(input, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
               >
                 {getOptions(exhibitionOptions)}
               </Select>
@@ -250,10 +291,14 @@ export default class RecommenderPage extends PureComponent {
               placeholder="请选择"
               value={state ? `${state}` : state}
               optionFilterProp="children"
-              onChange={(state) => {
+              onChange={state => {
                 this.setState({ state });
               }}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
             >
               {getOptions(STATE_OPTIONS)}
             </Select>
@@ -263,7 +308,7 @@ export default class RecommenderPage extends PureComponent {
               checkedChildren="更新时间"
               unCheckedChildren="创建时间"
               checked={order}
-              onChange={(checked) => {
+              onChange={checked => {
                 this.setState({
                   order: checked
                 });
@@ -273,6 +318,7 @@ export default class RecommenderPage extends PureComponent {
           <Form.Item label={' '} colon={false}>
             <Button
               type="primary"
+              icon={<SearchOutlined />}
               htmlType="submit"
               loading={loading}
               onClick={() => {

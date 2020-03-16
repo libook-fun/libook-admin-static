@@ -1,8 +1,29 @@
 import React, { PureComponent, Fragment } from 'react';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
-import { Form, Select, Input, Switch, Upload, Button, Icon, message, Breadcrumb, Tag, Divider, PageHeader } from 'antd';
-import { getCategorys, getBook, createBook, updateBook, getParentbook, getSubbooks, deleteBind } from 'agent';
+import {
+  Form,
+  Select,
+  Input,
+  Switch,
+  Upload,
+  Button,
+  message,
+  Breadcrumb,
+  Tag,
+  Divider,
+  PageHeader
+} from 'antd';
+import { UploadOutlined, FileImageOutlined } from '@ant-design/icons';
+import {
+  getCategorys,
+  getBook,
+  createBook,
+  updateBook,
+  getParentbook,
+  getSubbooks,
+  deleteBind
+} from 'agent';
 import { getOptions, FORM_LAYOUT } from 'utils/antdHelpers';
 
 export default class BookAdd extends PureComponent {
@@ -27,7 +48,14 @@ export default class BookAdd extends PureComponent {
     book_id &&
       getBook(book_id)
         .then((data = {}) => {
-          const { category_id, name, author, description, is_subbook, category = {} } = data;
+          const {
+            category_id,
+            name,
+            author,
+            description,
+            is_subbook,
+            category = {}
+          } = data;
           this.setState({
             category_id,
             name,
@@ -45,7 +73,7 @@ export default class BookAdd extends PureComponent {
             this.getSubbooks();
           }
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     getCategorys()
@@ -57,7 +85,7 @@ export default class BookAdd extends PureComponent {
           }))
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
@@ -80,13 +108,13 @@ export default class BookAdd extends PureComponent {
                     parentBook
                   });
                 })
-                .catch((error) => {
+                .catch(error => {
                   message.error(error.message);
                 });
             }
           );
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
   }
@@ -100,7 +128,7 @@ export default class BookAdd extends PureComponent {
             subbooks
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
   }
@@ -110,7 +138,7 @@ export default class BookAdd extends PureComponent {
     parent_id &&
       book_id &&
       deleteBind(parent_id, book_id)
-        .then((data) => {
+        .then(data => {
           message.success('解绑成功', 1, () => {
             this.setState({
               parent_id: undefined,
@@ -118,13 +146,20 @@ export default class BookAdd extends PureComponent {
             });
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
   }
 
   check() {
-    const { book_id, category_id, name, author, description, file } = this.state;
+    const {
+      book_id,
+      category_id,
+      name,
+      author,
+      description,
+      file
+    } = this.state;
     if (!category_id) {
       message.error('请输入分类');
       return false;
@@ -149,7 +184,15 @@ export default class BookAdd extends PureComponent {
   }
 
   getParam() {
-    const { book_id, category_id, name, author, description, is_subbook, file } = this.state;
+    const {
+      book_id,
+      category_id,
+      name,
+      author,
+      description,
+      is_subbook,
+      file
+    } = this.state;
     return {
       book_id,
       category_id,
@@ -172,7 +215,7 @@ export default class BookAdd extends PureComponent {
     });
     if (book_id) {
       updateBook(data)
-        .then((data) => {
+        .then(data => {
           this.setState({
             loading: false
           });
@@ -180,7 +223,7 @@ export default class BookAdd extends PureComponent {
             history.goBack();
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             loading: false
           });
@@ -188,7 +231,7 @@ export default class BookAdd extends PureComponent {
         });
     } else {
       createBook(data)
-        .then((data) => {
+        .then(data => {
           this.setState({
             loading: false
           });
@@ -196,7 +239,7 @@ export default class BookAdd extends PureComponent {
             history.goBack();
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             loading: false
           });
@@ -251,7 +294,7 @@ export default class BookAdd extends PureComponent {
               checkedChildren="是"
               unCheckedChildren="否"
               checked={is_subbook}
-              onChange={(checked) => {
+              onChange={checked => {
                 this.setState({
                   is_subbook: checked ? 1 : 0
                 });
@@ -264,7 +307,10 @@ export default class BookAdd extends PureComponent {
                   查看主书（{parentBook ? parentBook.name : null}）
                 </a>
                 <Divider type="vertical" />
-                <a href={`/cms/book/subbook?parent_id=${parent_id}`} target="_blank">
+                <a
+                  href={`/cms/book/subbook?parent_id=${parent_id}`}
+                  target="_blank"
+                >
                   查看相关丛书
                 </a>
                 <Divider type="vertical" />
@@ -277,7 +323,11 @@ export default class BookAdd extends PureComponent {
                 </a>
               </Fragment>
             ) : null}
-            {subbooks.length ? <Link to={`/cms/book/subbook?parent_id=${book_id}`}>查看丛书</Link> : null}
+            {subbooks.length ? (
+              <Link to={`/cms/book/subbook?parent_id=${book_id}`}>
+                查看丛书
+              </Link>
+            ) : null}
           </Form.Item>
           <Form.Item label="分类" required>
             <Select
@@ -285,10 +335,14 @@ export default class BookAdd extends PureComponent {
               placeholder="请选择"
               value={category_id ? `${category_id}` : category_id}
               optionFilterProp="children"
-              onChange={(category_id) => {
+              onChange={category_id => {
                 this.setState({ category_id });
               }}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
+              }
               ref={ref => (this.category_id = ref)}
             >
               {getOptions(categoryOptions)}
@@ -299,7 +353,7 @@ export default class BookAdd extends PureComponent {
               type="text"
               placeholder="请输入"
               value={name}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   name: e.target.value || undefined
                 });
@@ -312,7 +366,7 @@ export default class BookAdd extends PureComponent {
               type="text"
               placeholder="请输入"
               value={author}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   author: e.target.value || undefined
                 });
@@ -327,7 +381,7 @@ export default class BookAdd extends PureComponent {
               type="text"
               placeholder="请输入"
               value={description}
-              onChange={(e) => {
+              onChange={e => {
                 this.setState({
                   description: e.target.value || undefined
                 });
@@ -339,23 +393,27 @@ export default class BookAdd extends PureComponent {
             {!file ? (
               <Upload.Dragger
                 accept="image/png,image/jpeg,image/gif,image/webp"
-                beforeUpload={(file) => {
+                beforeUpload={file => {
                   this.setState({
                     file
                   });
                   return false;
                 }}
-                onRemove={(file) => {
+                onRemove={file => {
                   this.setState({
                     file: undefined
                   });
                 }}
               >
                 <p className="ant-upload-drag-icon">
-                  <Icon type="inbox" />
+                  <UploadOutlined />
                 </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+                <p className="ant-upload-text">
+                  Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Support for a single or bulk upload.
+                </p>
               </Upload.Dragger>
             ) : (
               <div>
@@ -367,14 +425,19 @@ export default class BookAdd extends PureComponent {
                     });
                   }}
                 >
-                  <Icon type="file-image" />
+                  <FileImageOutlined />
                   <span style={{ marginLeft: 10 }}>{file.name}</span>
                 </Tag>
               </div>
             )}
           </Form.Item>
           <Form.Item label={' '} colon={false}>
-            <Button type="primary" htmlType="submit" loading={loading} onClick={this.submit}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              onClick={this.submit}
+            >
               {book_id ? '更新' : '创建'}
             </Button>
           </Form.Item>

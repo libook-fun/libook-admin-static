@@ -1,5 +1,16 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Form, Select, Input, Switch, Button, Table, Divider, message, Breadcrumb } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Switch,
+  Button,
+  Table,
+  Divider,
+  message,
+  Breadcrumb
+} from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { history } from 'core/history';
 import { Link } from 'react-router-dom';
@@ -62,12 +73,12 @@ export default class Subbook extends PureComponent {
   delete(record = {}) {
     const { parent_id, book_id } = record;
     deleteBind(parent_id, book_id)
-      .then((data) => {
+      .then(data => {
         message.success('解绑成功', 1, () => {
           this.getSubbooks();
         });
       })
-      .catch((error) => {
+      .catch(error => {
         message.error(error.message);
       });
   }
@@ -81,7 +92,7 @@ export default class Subbook extends PureComponent {
             book
           });
         })
-        .catch((error) => {
+        .catch(error => {
           message.error(error.message);
         });
     this.getSubbooks();
@@ -107,7 +118,7 @@ export default class Subbook extends PureComponent {
             loading: false
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({
             loading: false
           });
@@ -126,20 +137,29 @@ export default class Subbook extends PureComponent {
           <Breadcrumb.Item>
             <Link to="/cms/book">书籍管理</Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{book ? `${book.name}丛书管理` : '丛书管理'}</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {book ? `${book.name}丛书管理` : '丛书管理'}
+          </Breadcrumb.Item>
         </Breadcrumb>
-        <div className="list-table-operator">
-          <Button
-            type="primary"
-            icon="plus"
-            onClick={() => {
-              history.push(`/cms/book/subbook/add?parent_id=${parent_id}`);
-            }}
-          >
-            创建丛书
-          </Button>
-        </div>
-        <Table columns={this.columns} dataSource={dataSource} rowKey={record => record.bind_id} loading={loading} />
+        <Form layout="inline" style={{ marginTop: 20, marginBottom: 20 }}>
+          <Form.Item label={' '} colon={false}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => {
+                history.push(`/cms/book/subbook/add?parent_id=${parent_id}`);
+              }}
+            >
+              创建丛书
+            </Button>
+          </Form.Item>
+        </Form>
+        <Table
+          columns={this.columns}
+          dataSource={dataSource}
+          rowKey={record => record.bind_id}
+          loading={loading}
+        />
       </div>
     );
   }
